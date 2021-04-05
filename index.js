@@ -26,6 +26,8 @@ client.connect( err => {
   const sweetCollection = client.db( "roshogolla" ).collection( "products" );
   const ordersCollection = client.db( "roshogolla" ).collection( "orders" );
   const PlacedOrdersCollection = client.db( "roshogolla" ).collection( "placedOrder" );
+
+  // adding product from admin component
   app.post( '/addProduct', ( req, res ) => {
     const newProduct = req.body;
     console.log( newProduct );
@@ -34,15 +36,16 @@ client.connect( err => {
         res.send( result )
 
       } )
-  } )
-
+  } );
+  // get product from home
   app.get( '/products', ( req, res ) => {
     sweetCollection.find( {} )
       .toArray( ( err, docs ) => {
         res.send( docs )
 
       } )
-  } )
+  } );
+  // added product to cart
   app.post( '/orders', ( req, res ) => {
     const order = req.body.key
     sweetCollection.find( { "_id": ObjectId( order ) } )
@@ -55,11 +58,11 @@ client.connect( err => {
 
             if ( docs.length === 0 ) {
               data[0].quantity = 1
-               data[0].date=req.body.date
-                data[0].user= req.body.user
-                data[0].email= req.body.email
-                
-             
+              data[0].date = req.body.date
+              data[0].user = req.body.user
+              data[0].email = req.body.email
+
+
               ordersCollection.insertOne( data[0] )
             }
             else {
@@ -72,36 +75,35 @@ client.connect( err => {
           } )
       } )
 
-  } )
+  } );
 
-    app.get( '/orderedProduct', ( req, res ) => {
-    
+  app.get( '/orderedProduct', ( req, res ) => {
+
     ordersCollection.find( {} )
       .toArray( ( err, docs ) => {
         res.send( docs )
 
       } )
-  } )
-   app.delete('/deleteAddedProduct', ( req, res ) => {
-        ordersCollection.deleteMany({})
-        
-    })
+  } );
+  // Delete  all added product from cart
+  app.delete( '/deleteAddedProduct', ( req, res ) => {
+    ordersCollection.deleteMany( {} )
 
-    app.post('/ordered',(req,res)=>{
+  } );
+
+
+  // added  product to database before deleted cart product
+  app.post( '/ordered', ( req, res ) => {
     PlacedOrdersCollection.insertOne( req.body )
-            .then( result => {
+      .then( result => {
 
-                res.send( result )
-            } )
-    
-    
-})
-    app.delete('/delete/:key',(req,res)=>{
-      sweetCollection.deleteOne({'_id': ObjectId(req.params.key)})
-})
-    
-
-
+        res.send( result )
+      } )
+  } );
+  // deleted a single product from admin
+  app.delete( '/delete/:key', ( req, res ) => {
+    sweetCollection.deleteOne( { '_id': ObjectId( req.params.key ) } )
+  } );
 
 } );
 
@@ -110,4 +112,4 @@ client.connect( err => {
 
 
 
-app.listen( 5001 )
+app.listen( port || 5001 )
