@@ -8,9 +8,9 @@
 6. nodemon
 ***
 ## Features :::
-- _/addProduct_ adding product from admin component
-- _/products_ get product from home
-- _/orders_ added product to cart
-- _/deleteAddedProduct_ Delete  all added product from cart
-- _/ordered_ added  product to database before deleted cart product
-- _/delete/:key_  deleted a single product from admin
+- _/addProduct_ : adding product from admin component
+- _/products_ : get product from home
+- _/orders_ : added product to cart
+- _/deleteAddedProduct_ : Delete  all added product from cart
+- _/ordered_ : added  product to database before deleted cart product
+- _/delete/:key_ : deleted a single product from admin
